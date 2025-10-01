@@ -1,1 +1,36 @@
-.venv
+# PyCharm
+.idea/
+*.iml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Django
+*.log
+*.pot
+*.pyc
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# Logs
+logs/*
+!logs/.gitkeep
+
+# Environment variables
+.env
+
+# OS
+.DS_Store
+Thumbs.db

@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 import os
 from pathlib import Path
-from decouple import config, Csv
+from decouple import config
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -48,7 +48,9 @@ THIRD_PARTY_APPS = [
     'debug_toolbar',
 ]
 
-LOCAL_APPS = []
+LOCAL_APPS = [
+    'account',
+]
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
@@ -176,27 +178,63 @@ SECURE_HSTS_SECONDS = 0
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 
-# Logging (простое для разработки)
+# Logging
+LOGS_DIR = BASE_DIR / 'logs'
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{'
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{'
+        }
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'simple',
         },
+        'file_django': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOGS_DIR / 'django.log',
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 5,
+            'formatter': 'verbose',
+        },
+        'file_db': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOGS_DIR / 'django_db.log',
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 5,
+            'formatter': 'verbose'
+        },
+        'file_errors': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': LOGS_DIR / 'errors.log',
+            'maxBytes': 1024 * 1024 * 10,
+            'backupCount': 5,
+            'formatter': 'verbose',
+            'level': 'ERROR'
+        }
     },
     'loggers': {
         'django': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file_django'],
             'level': config('DJANGO_LOG_LEVEL', default='INFO'),
+            'propagate': False
         },
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file_errors'],
             'level': 'DEBUG',
             'propagate': False,
         },
         'django.db.backends': {
-            'handlers': ['file'],
+            'handlers': ['file_db'],
             'level': 'DEBUG',
             'propagate': False,
         },
