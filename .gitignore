@@ -21,9 +21,9 @@ build/
 *.pyc
 db.sqlite3
 db.sqlite3-journal
-media/
+media/*
 !media/.gitkeep
-staticfiles/
+staticfiles/*
 !staticfiles/.gitkeep
 
 # Logs
