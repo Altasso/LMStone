@@ -170,7 +170,7 @@ CORS_ALLOW_CREDENTIALS = True
 
 INTERNAL_IPS = [
     "127.0.0.1",
-    "localhost"
+    "localhost",
 ]
 
 SECURE_SSL_REDIRECT = False
